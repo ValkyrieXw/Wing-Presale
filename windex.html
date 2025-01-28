@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ValX Presale Event.</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        /* Set the background image */
+        body {
+            background: url('https://github.com/ValkyrieXw/Wing-Presale/blob/main/6d569239-1608-4002-8e93-691bd5cb5ff7.jpg?raw=true') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+            margin-top: 5rem;
+            color: white;
+        }
+
+        header, footer {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #qrModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        #qrModal canvas {
+            margin: 1rem 0;
+        }
+
+        #qrModalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WING presale Event</h1>
+        <p>Buy WING securely using XAMAN.</p>
+    </header>
+
+    <main>
+        <form id="presaleForm">
+            <label for="xrpAmount"><strong>Amount of XRP:</strong></label>
+            <input type="number" id="xrpAmount" name="xrpAmount" placeholder="Enter XRP amount" required>
+            <p id="tokenAmount">Tokens you will receive: <strong>0</strong></p>
+            <button type="button" onclick="generateQRCode()">Generate QR Code</button>
+        </form>
+    </main>
+
+    <!-- Modal overlay -->
+    <div id="qrModalOverlay" onclick="closeModal()"></div>
+
+    <!-- QR code modal -->
+    <div id="qrModal">
+        <h2>Payment QR Code</h2>
+        <p>Scan this QR code to complete your payment:</p>
+        <canvas id="qrcode"></canvas>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 VALX Presale. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const tokenRate = 200; // Number of tokens per XRP
+        const sellerWalletAddress = "rQGasW9jthcdNuiCBRBWvjz3Qw6aoF9aa2"; // Replace with your wallet address
+
+        // Update token amount dynamically
+        document.getElementById('xrpAmount').addEventListener('input', (e) => {
+            const xrp = parseFloat(e.target.value) || 0;
+            document.getElementById('tokenAmount').innerText = `Tokens you will receive: ${xrp * tokenRate}`;
+        });
+
+        // Generate QR code for payment and show modal
+        function generateQRCode() {
+            const xrpAmount = parseFloat(document.getElementById('xrpAmount').value);
+
+            if (!xrpAmount || xrpAmount <= 0) {
+                alert("Please enter a valid XRP amount.");
+                return;
+            }
+
+            // Convert XRP to drops (1 XRP = 1 drops)
+            const xrpInDrops = Math.round(xrpAmount * 1);
+
+            // Generate the XRPL payment URI
+            const paymentURI = `xrpl:${sellerWalletAddress}?amount=${xrpInDrops}`;
+
+            // Display QR code in modal
+            const qrCanvas = document.getElementById('qrcode');
+            QRCode.toCanvas(qrCanvas, paymentURI, { width: 200 });
+
+            // Show modal
+            document.getElementById('qrModal').style.display = 'block';
+            document.getElementById('qrModalOverlay').style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('qrModal').style.display = 'none';
+            document.getElementById('qrModalOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
