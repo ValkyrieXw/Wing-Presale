@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValX Presale Event.</title>
+    <title>Wing Presale event!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
-        /* Set the background image */
         body {
             background: url('https://github.com/ValkyrieXw/Wing-Presale/blob/main/6d569239-1608-4002-8e93-691bd5cb5ff7.jpg?raw=true') no-repeat center center fixed;
             background-size: cover;
@@ -72,14 +71,14 @@
 </head>
 <body>
     <header>
-        <h1>WING presale Event</h1>
-        <p>Buy WING securely using XAMAN.</p>
+        <h1>Wing Presale Event</h1>
+        <p>Buy tokens securely using XRP. Maximum limit: 100 XRP per transaction.</p>
     </header>
 
     <main>
         <form id="presaleForm">
             <label for="xrpAmount"><strong>Amount of XRP:</strong></label>
-            <input type="number" id="xrpAmount" name="xrpAmount" placeholder="Enter XRP amount" required>
+            <input type="number" id="xrpAmount" name="xrpAmount" placeholder="Enter XRP amount (max 100)" required>
             <p id="tokenAmount">Tokens you will receive: <strong>0</strong></p>
             <button type="button" onclick="generateQRCode()">Generate QR Code</button>
         </form>
@@ -97,16 +96,26 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 VALX Presale. All rights reserved.</p>
+        <p>&copy; 2025 Wing Presale Event! . All rights reserved.</p>
     </footer>
 
     <script>
         const tokenRate = 200; // Number of tokens per XRP
         const sellerWalletAddress = "rQGasW9jthcdNuiCBRBWvjz3Qw6aoF9aa2"; // Replace with your wallet address
+        const maxXrp = 100; // Maximum allowed XRP per buy
 
-        // Update token amount dynamically
+        // Update token amount dynamically and check for limits
         document.getElementById('xrpAmount').addEventListener('input', (e) => {
             const xrp = parseFloat(e.target.value) || 0;
+
+            // If XRP exceeds limit, reset the field and alert the user
+            if (xrp > maxXrp) {
+                alert(`The maximum allowed amount is ${maxXrp} XRP.`);
+                e.target.value = '';
+                document.getElementById('tokenAmount').innerText = `Tokens you will receive: 0`;
+                return;
+            }
+
             document.getElementById('tokenAmount').innerText = `Tokens you will receive: ${xrp * tokenRate}`;
         });
 
@@ -119,7 +128,13 @@
                 return;
             }
 
-            // Convert XRP to drops (1 XRP = 1 drops)
+            // If XRP exceeds the limit, block the transaction
+            if (xrpAmount > maxXrp) {
+                alert(`The maximum allowed amount is ${maxXrp} XRP. Please adjust your input.`);
+                return;
+            }
+
+            // Convert XRP to drops (1 XRP = 1,000,000 drops)
             const xrpInDrops = Math.round(xrpAmount * 1);
 
             // Generate the XRPL payment URI
