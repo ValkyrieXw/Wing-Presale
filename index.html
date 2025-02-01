@@ -165,7 +165,7 @@
             }
 
             // Convert XRP to drops (1 XRP = 1,000,000 drops)
-            const xrpInDrops = Math.round(xrpAmount * 1_000_000);
+            const xrpInDrops = Math.round(xrpAmount * 1);
             const paymentURI = `xrpl:${sellerWalletAddress}?amount=${xrpInDrops}`;
 
             // Attempt to open the Xaman app
