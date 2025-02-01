@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wing Presale event!</title>
+    <title>Wing Presale Event!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
@@ -92,11 +92,12 @@
         <h2>Payment QR Code</h2>
         <p>Scan this QR code to complete your payment:</p>
         <canvas id="qrcode"></canvas>
+        <button onclick="openXamanApp()">Pay with Xaman</button>
         <button onclick="closeModal()">Close</button>
     </div>
 
     <footer>
-        <p>&copy; 2025 Wing Presale Event! . All rights reserved.</p>
+        <p>&copy; 2025 Wing Presale Event! All rights reserved.</p>
     </footer>
 
     <script>
@@ -135,7 +136,7 @@
             }
 
             // Convert XRP to drops (1 XRP = 1,000,000 drops)
-            const xrpInDrops = Math.round(xrpAmount * 1);
+            const xrpInDrops = Math.round(xrpAmount * 1_000_000);
 
             // Generate the XRPL payment URI
             const paymentURI = `xrpl:${sellerWalletAddress}?amount=${xrpInDrops}`;
@@ -147,6 +148,28 @@
             // Show modal
             document.getElementById('qrModal').style.display = 'block';
             document.getElementById('qrModalOverlay').style.display = 'block';
+        }
+
+        // Open Xaman app for payment
+        function openXamanApp() {
+            const xrpAmount = parseFloat(document.getElementById('xrpAmount').value);
+
+            if (!xrpAmount || xrpAmount <= 0) {
+                alert("Please enter a valid XRP amount.");
+                return;
+            }
+
+            if (xrpAmount > maxXrp) {
+                alert(`The maximum allowed amount is ${maxXrp} XRP. Please adjust your input.`);
+                return;
+            }
+
+            // Convert XRP to drops (1 XRP = 1,000,000 drops)
+            const xrpInDrops = Math.round(xrpAmount * 1_000_000);
+            const paymentURI = `xrpl:${sellerWalletAddress}?amount=${xrpInDrops}`;
+
+            // Attempt to open the Xaman app
+            window.location.href = paymentURI;
         }
 
         // Close modal
